@@ -33,6 +33,11 @@ from verl.trainer.config import AlgoConfig
 from verl.utils import as_torch_index, group_mean_std
 from verl.utils.import_utils import deprecated
 from verl.workers.config import ActorConfig
+from verl.trainer.ppo.rollout_utils import (
+    analyze_distribution, 
+    find_shortest_covering_subarray,
+    print_distribution_analysis
+)
 
 PolicyLossFn = Callable[
     [
@@ -303,26 +308,52 @@ def compute_grpo_outcome_advantage(
     id2score = defaultdict(list)
     id2mean = {}
     id2std = {}
+    id2Q = {}
+    id2squared_dev_sum = {}
 
     with torch.no_grad():
         bsz = scores.shape[0]
         for i in range(bsz):
             id2score[index[i]].append(scores[i])
         for idx in id2score:
-            if len(id2score[idx]) == 1:
+            scores_tensor = torch.tensor(id2score[idx])
+            if len(scores_tensor) == 1:
                 id2mean[idx] = torch.tensor(0.0)
                 id2std[idx] = torch.tensor(1.0)
-            elif len(id2score[idx]) > 1:
-                scores_tensor = torch.stack(id2score[idx])
+                id2Q[idx] = torch.tensor(0.0)
+                id2squared_dev_sum[idx] = torch.tensor(1.0)
+            elif len(scores_tensor) > 1:
                 id2mean[idx] = torch.mean(scores_tensor)
                 id2std[idx] = torch.std(scores_tensor)
+                if config.get('find_method') in ['mean', 'median']:
+                    scores_numpy = scores_tensor.cpu().numpy()
+                    analysis = analyze_distribution(scores_numpy.tolist())
+                    print_distribution_analysis(analysis)
+                    mean, median = find_shortest_covering_subarray(
+                        scores_numpy.tolist(), 
+                        tau=config.get('find_target_fraction', 0.5) * 100
+                    )
+                    if config.get('find_method') == 'mean':
+                        id2Q[idx] = mean
+                    elif config.get('find_method') == 'median':
+                        id2Q[idx] = median
+                    else:
+                        raise NotImplementedError
+                    squared_dev_sum = torch.sum((scores_tensor - id2Q[idx]) ** 2) / (len(scores_tensor) - 1)
+                    id2squared_dev_sum[idx] = torch.sqrt(squared_dev_sum)
             else:
                 raise ValueError(f"no score in prompt index: {idx}")
         for i in range(bsz):
             if norm_adv_by_std_in_grpo:
-                scores[i] = (scores[i] - id2mean[index[i]]) / (id2std[index[i]] + epsilon)
+                if config.get('find_method') in ['mean', 'median']:
+                    scores[i] = (scores[i] - id2Q[index[i]]) / (id2squared_dev_sum[index[i]] + epsilon)
+                else:
+                    scores[i] = (scores[i] - id2mean[index[i]]) / (id2std[index[i]] + epsilon)
             else:
-                scores[i] = scores[i] - id2mean[index[i]]
+                if config.get('find_method') in ['mean', 'median']:
+                    scores[i] = scores[i] - id2Q[index[i]]
+                else:
+                    scores[i] = scores[i] - id2mean[index[i]]
         scores = scores.unsqueeze(-1) * response_mask
 
     return scores, scores
