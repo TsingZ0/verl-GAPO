@@ -1,4 +1,4 @@
-## GAPO: Group Adaptive Policy Optimization for Real-World Code Edit
+## GAPO: Robust Advantage Estimation for Real-World Code LLMs
 
 [![arXiv](https://img.shields.io/badge/arXiv-2312.04992-b31b1b.svg)](https://arxiv.org/abs/2510.21830)
 ![Apache License 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
