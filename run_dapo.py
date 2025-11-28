@@ -66,12 +66,10 @@ def main():
     train_prompt_mini_bsz = args.update_bsz
 
     NNODES = 1
-    MODEL_PATH = f"/data_large/zjq/models/{model_name}"
-    CKPTS_DIR = f"/data_train/zjq/verl-GAPO/models/{project_name}/{exp_name}"
-    TRAIN_FILE = "/data_train/zjq/code_edit_data/ours/trainset_v1_5.parquet"
-    # TRAIN_FILE = "/data_train/zjq/code_edit_data/ours/trainset_v1.6_0814.parquet"
-    TEST_FILE = "/data_train/zjq/code_edit_data/ours/testset_v1_5.parquet"
-    # TEST_FILE = "/data_train/zjq/code_edit_data/ours/testset_v1.6_0814.parquet"
+    MODEL_PATH = f"/data/models/{model_name}"
+    CKPTS_DIR = f"/data/verl-GAPO/models/{project_name}/{exp_name}"
+    TRAIN_FILE = "/data/trainset.parquet"
+    TEST_FILE = "/data/testset.parquet"
 
     temperature = 1.0
     top_p = 1.0

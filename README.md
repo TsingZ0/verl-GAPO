@@ -10,6 +10,8 @@ Reinforcement learning (RL) is widely used for post-training large language mode
 ### How to Use
 
 ```bash
+# Configure MODEL_PATH, CKPTS_DIR, TRAIN_FILE, TEST_FILE in run_grpo.py and run_dapo.py before you run.
+
 python -u run_grpo.py --reward_function edem --model_name Qwen2.5-Coder-7B-Instruct --GPUs 0,1,2,3,4,5,6,7 --rollout_bsz 512 --update_bsz 32 --rollout_n 8 --find_method median --verbose median-div # for grpo
 python -u run_dapo.py --reward_function edem --model_name Qwen2.5-Coder-7B-Instruct --GPUs 0,1,2,3,4,5,6,7 --rollout_bsz 512 --update_bsz 32 --rollout_n 8 --find_method median --verbose median-div # for dapo
 ```
