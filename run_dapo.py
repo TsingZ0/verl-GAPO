@@ -35,8 +35,8 @@ def main():
     GPUs = args.GPUs
 
     save_contents = "['hf_model']"
-    project_name = args.project_name + f"-{reward_function}"
-    exp_name = f"{model_name}-{reward_function}"
+    project_name = args.project_name + f"-{args.reward_function}"
+    exp_name = f"{model_name}-{args.reward_function}"
     save_folder = args.save_folder
     if args.verbose:
         exp_name += f"-{args.verbose}"
