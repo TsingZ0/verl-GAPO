@@ -6,7 +6,7 @@ import socket
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--project_name", type=str, default="DAPO-Code-Edit")
-    parser.add_argument("--reward_function", type=str, default="em")
+    parser.add_argument("--reward_function", type=str, default="ed")
     parser.add_argument("--model_name", type=str, default="Qwen2.5-Coder-3B-Instruct")
     parser.add_argument("--GPUs", type=str, default="0,1,2,3,4,5,6,7")
     parser.add_argument("--rollout_bsz", type=int, default=512)
