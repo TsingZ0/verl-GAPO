@@ -20,9 +20,3 @@ python -u run_grpo.py --reward_function edem --model_name Qwen2.5-Coder-7B-Instr
 
 python -u run_dapo.py --reward_function edem --model_name Qwen2.5-Coder-7B-Instruct --GPUs 0,1,2,3,4,5,6,7 --rollout_bsz 512 --update_bsz 32 --rollout_n 8 --find_method median --verbose median-div # for dapo
 ```
-
-### Citation
-
-```
-
-```
