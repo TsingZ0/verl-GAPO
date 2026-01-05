@@ -56,7 +56,7 @@ def main():
 
     NNODES = 1
     MODEL_PATH = f"/YOUR_DATA_FOLDER/models/{model_name}"
-    CKPTS_DIR = f"/YOUR_DATA_FOLDER/verl-GAPO/models/{project_name}/{exp_name}"
+    CKPTS_DIR = f"/YOUR_DATA_FOLDER/models/{project_name}/{exp_name}"
     TRAIN_FILE = "/YOUR_DATA_FOLDER/trainset.parquet"
     TEST_FILE = "/YOUR_DATA_FOLDER/testset.parquet"
 
