@@ -12,7 +12,7 @@ def main():
     parser.add_argument("--rollout_bsz", type=int, default=512)
     parser.add_argument("--update_bsz", type=int, default=32)
     parser.add_argument("--rollout_n", type=int, default=16)
-    parser.add_argument("--gen_x", type=int, default=3)
+    parser.add_argument("--gen_x", type=int, default=1)
     parser.add_argument("--verbose", type=str, default="")
     parser.add_argument("--adv_estimator", type=str, default="grpo")
     parser.add_argument("--find_method", type=str, default=None)
